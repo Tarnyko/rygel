@@ -170,6 +170,18 @@ AS_IF([test "x$enable_ruih_plugin" = "xyes"],
                        libxml-2.0 >= $LIBXML_REQUIRED])
   ])
 
+
+RYGEL_ADD_PLUGIN([lms],[LightMediaScanner],[yes])
+AS_IF([test "x$enable_lms_plugin" = "xyes"],
+  [
+    PKG_CHECK_MODULES([RYGEL_PLUGIN_LMS_DEPS],
+                      [$RYGEL_COMMON_MODULES
+                       gio-2.0 >= $GIO_REQUIRED
+                       sqlite3 >= $LIBSQLITE3_REQUIRED])
+    RYGEL_PLUGIN_LMS_DEPS_VALAFLAGS="$RYGEL_COMMON_MODULES_VALAFLAGS --pkg gio-2.0 --pkg gee-0.8 --pkg rygel-server-2.0 --pkg rygel-core-2.0  --pkg sqlite3"
+    AC_SUBST([RYGEL_PLUGIN_LMS_DEPS_VALAFLAGS])
+  ])
+
 AS_IF([test "x$with_media_engine" = "xgstreamer"],
       [
         RYGEL_ADD_PLUGIN([playbin],[GStreamer playbin],[yes])
@@ -332,6 +344,11 @@ then
     fi
 fi
 
+dnl Check additional requirements for LMS plugin
+if test "x$enable_lms_plugin" = "xyes";
+then
+    RYGEL_CHECK_PACKAGES([sqlite3])
+fi
 
 RYGEL_ADD_PLUGIN([tracker],[Tracker],[yes])
 AS_IF([test "x$enable_tracker_plugin" = "xyes"],
@@ -513,6 +530,7 @@ echo "
             version:            ${tracker_api_version}
         mediathek:              ${enable_mediathek_plugin}
         media-export            ${enable_media_export_plugin}
+        lightmediascanner       ${enable_lms_plugin}
         external:               ${enable_external_plugin}
         MPRIS2:                 ${enable_mpris_plugin}
         gst-launch:             ${enable_gst_launch_plugin}
