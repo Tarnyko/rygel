@@ -832,10 +832,10 @@ internal class Rygel.AVTransport : Service {
         // Error codes gotten by experience from several web services or web
         // radio stations that don't support HEAD but return a variety of
         // errors.
-        if ((msg.status_code == Status.MALFORMED ||
-             msg.status_code == Status.BAD_REQUEST ||
-             msg.status_code == Status.METHOD_NOT_ALLOWED ||
-             msg.status_code == Status.NOT_IMPLEMENTED) &&
+        if ((msg.status_code == KnownStatusCode.MALFORMED ||
+             msg.status_code == KnownStatusCode.BAD_REQUEST ||
+             msg.status_code == KnownStatusCode.METHOD_NOT_ALLOWED ||
+             msg.status_code == KnownStatusCode.NOT_IMPLEMENTED) &&
             msg.method == "HEAD") {
             debug ("Peer does not support HEAD, trying GET");
             msg.method = "GET";
@@ -849,7 +849,7 @@ internal class Rygel.AVTransport : Service {
             return;
         }
 
-        if (msg.status_code != Status.OK && !this.head_faked) {
+        if (msg.status_code != KnownStatusCode.OK && !this.head_faked) {
             // TRANSLATORS: first %s is a URI, the second an explanaition of
             // the error
             warning (_("Failed to access resource at %s: %s"),

@@ -176,10 +176,10 @@ public class Rygel.HTTPGet : HTTPRequest {
         } catch (PlaySpeedError error) {
             this.server.unpause_message (this.msg);
             if (error is PlaySpeedError.INVALID_SPEED_FORMAT) {
-                this.end (Soup.Status.BAD_REQUEST, error.message);
+                this.end (Soup.KnownStatusCode.BAD_REQUEST, error.message);
                 // Per DLNA 7.5.4.3.3.16.3
             } else if (error is PlaySpeedError.SPEED_NOT_PRESENT) {
-                this.end (Soup.Status.NOT_ACCEPTABLE, error.message);
+                this.end (Soup.KnownStatusCode.NOT_ACCEPTABLE, error.message);
                  // Per DLNA 7.5.4.3.3.16.5
             } else {
                 throw error;
@@ -214,7 +214,7 @@ public class Rygel.HTTPGet : HTTPRequest {
             warning ("Caught HTTPSeekRequestError: %s", error.message);
             this.server.unpause_message (this.msg);
             this.end (error.code, error.message);
-            // All seek error codes are Soup.Status codes
+            // All seek error codes are Soup.KnownStatusCode.codes
 
             return;
          }
@@ -239,7 +239,7 @@ public class Rygel.HTTPGet : HTTPRequest {
                      error.message);
             this.server.unpause_message (this.msg);
             this.end (error.code, error.message);
-            // All seek error codes are Soup.Status codes
+            // All seek error codes are Soup.KnownStatusCode.codes
 
             return;
         }
@@ -327,9 +327,9 @@ public class Rygel.HTTPGet : HTTPRequest {
         {
             int response_code;
             if (this.msg.response_headers.get_one ("Content-Range") != null) {
-                response_code = Soup.Status.PARTIAL_CONTENT;
+                response_code = Soup.KnownStatusCode.PARTIAL_CONTENT;
             } else {
-                response_code = Soup.Status.OK;
+                response_code = Soup.KnownStatusCode.OK;
             }
             this.msg.set_status (response_code);
         }
@@ -354,6 +354,6 @@ public class Rygel.HTTPGet : HTTPRequest {
 
         yield response.run ();
 
-        this.end (Soup.Status.NONE);
+        this.end (Soup.KnownStatusCode.NONE);
     }
 }

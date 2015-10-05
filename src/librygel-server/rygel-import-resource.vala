@@ -226,7 +226,7 @@ internal class Rygel.ImportResource : GLib.Object, Rygel.StateMachine {
             } else {
                 this.status = TransferStatus.ERROR;
             }
-            this.session.cancel_message (message, Status.CANCELLED);
+            this.session.cancel_message (message, KnownStatusCode.CANCELLED);
         }
     }
 
@@ -268,7 +268,7 @@ internal class Rygel.ImportResource : GLib.Object, Rygel.StateMachine {
             file.delete (this.cancellable);
         } catch (Error error) {};
 
-        var phrase = Status.get_phrase (message.status_code);
+        var phrase = status_get_phrase (message.status_code);
         warning (_("Failed to import file from %s: %s"),
                  this.source_uri,
                  phrase);
@@ -277,7 +277,7 @@ internal class Rygel.ImportResource : GLib.Object, Rygel.StateMachine {
             return;
         }
 
-        if (message.status_code == Soup.Status.NOT_FOUND ||
+        if (message.status_code == Soup.KnownStatusCode.NOT_FOUND ||
             message.status_code < 100) {
             this.action.return_error (714, phrase);
         } else {

@@ -76,14 +76,14 @@ public class Rygel.HTTPResponse : GLib.Object, Rygel.StateMachine {
         this.src = src;
         this.sink = new DataSink (this.src, this.server, this.msg, this.seek);
         this.src.done.connect ( () => {
-            this.end (false, Status.NONE);
+            this.end (false, KnownStatusCode.NONE);
         });
         this.src.error.connect ( (error) => {
             if (error is DataSourceError.SEEK_FAILED) {
                 this.end (false,
-                          Status.REQUESTED_RANGE_NOT_SATISFIABLE);
+                          KnownStatusCode.REQUESTED_RANGE_NOT_SATISFIABLE);
             } else {
-                this.end (false, Status.NONE);
+                this.end (false, KnownStatusCode.NONE);
             }
         });
 
@@ -113,7 +113,7 @@ public class Rygel.HTTPResponse : GLib.Object, Rygel.StateMachine {
             this.src.start ();
         } catch (Error error) {
             Idle.add (() => {
-                this.end (false, Status.NONE);
+                this.end (false, KnownStatusCode.NONE);
 
                 return false;
             });
@@ -136,7 +136,7 @@ public class Rygel.HTTPResponse : GLib.Object, Rygel.StateMachine {
             this.run_continue ();
         }
 
-        if (status != Soup.Status.NONE) {
+        if (status != Soup.KnownStatusCode.NONE) {
             this.msg.set_status (status);
         }
 
@@ -144,7 +144,7 @@ public class Rygel.HTTPResponse : GLib.Object, Rygel.StateMachine {
     }
 
     private void on_cancelled (Cancellable cancellable) {
-        this.end (true, Soup.Status.CANCELLED);
+        this.end (true, Soup.KnownStatusCode.CANCELLED);
     }
 
     private void on_server_weak_ref (GLib.Object object) {

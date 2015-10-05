@@ -28,12 +28,12 @@
 /**
  * Various errors that can be thrown when attempting to seek into a stream.
  *
- * Note: All codes must be set to Soup.Status codes
+ * Note: All codes must be set to Soup.KnownStatusCode.codes
  */
 public errordomain Rygel.HTTPSeekRequestError {
-    INVALID_RANGE = Soup.Status.BAD_REQUEST,
-    BAD_REQUEST = Soup.Status.BAD_REQUEST,
-    OUT_OF_RANGE = Soup.Status.REQUESTED_RANGE_NOT_SATISFIABLE,
+    INVALID_RANGE = Soup.KnownStatusCode.BAD_REQUEST,
+    BAD_REQUEST = Soup.KnownStatusCode.BAD_REQUEST,
+    OUT_OF_RANGE = Soup.KnownStatusCode.REQUESTED_RANGE_NOT_SATISFIABLE,
 }
 
 /**

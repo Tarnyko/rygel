@@ -26,10 +26,10 @@
  */
 
 public errordomain Rygel.HTTPRequestError {
-    UNACCEPTABLE = Soup.Status.NOT_ACCEPTABLE,
-    BAD_REQUEST = Soup.Status.BAD_REQUEST,
-    NOT_FOUND = Soup.Status.NOT_FOUND,
-    INTERNAL_SERVER_ERROR = Soup.Status.INTERNAL_SERVER_ERROR
+    UNACCEPTABLE = Soup.KnownStatusCode.NOT_ACCEPTABLE,
+    BAD_REQUEST = Soup.KnownStatusCode.BAD_REQUEST,
+    NOT_FOUND = Soup.KnownStatusCode.NOT_FOUND,
+    INTERNAL_SERVER_ERROR = Soup.KnownStatusCode.INTERNAL_SERVER_ERROR
 }
 
 /**
@@ -107,14 +107,14 @@ public abstract class Rygel.HTTPRequest : GLib.Object, Rygel.StateMachine {
         if (error is HTTPRequestError) {
             status = error.code;
         } else {
-            status = Soup.Status.NOT_FOUND;
+            status = Soup.KnownStatusCode.NOT_FOUND;
         }
 
         this.end (status, error.message);
     }
 
     protected void end (uint status, string ? reason = null) {
-        if (status != Soup.Status.NONE) {
+        if (status != Soup.KnownStatusCode.NONE) {
             if (reason == null) {
                 this.msg.set_status (status);
             } else {
